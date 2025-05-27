@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('home') }}">Mi App</a>
+            <a class="navbar-brand" href="{{ url_for('home') }}">Entrega Pedidos</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -33,6 +33,14 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Editar Contenido</a>
                             </li>
+                        {% elif session['role'] == 'driver' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/ver_mapa">Recorrido</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/pedido">Entrega Pedidos</a>
+                            </li>
+
                         {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
