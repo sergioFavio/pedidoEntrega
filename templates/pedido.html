@@ -5,68 +5,193 @@
 {% block content %}
 
 <div class="container-fluid" style="position: absolute;">
-<!--div-->
-  <!--center-->
-    <h4>Pedido No. xxxx</h4>
-    <h6>Tienda: xxxxxxxxxxxxxxxxxxxxxxx  Contacto: xxxxxxxxxxxxxxxxxx</h6>
-    <h6>Dirección: xxxxxxxxxxxxxxxxxxxxxxx  Teléfono: 99999999 </h6>
-    <form id="pedidoForm">
-        <table>
-            <tr>
-                <th>Código</th>
-                <th>Producto</th>
-                <th>Precio de Venta</th>
-                <th>Cantidad</th>
-                <th>Importe</th>
-            </tr>
-            <tr>
-                <td><input type="text" name="codigo1" required></td>
-                <td><input type="text" name="producto1" required></td>
-                <td><input type="number" name="precio1" step="0.01" required></td>
-                <td><input type="number" name="cantidad1" required></td>
-                <td><input type="number" name="importe1" readonly></td>
-            </tr>
-            <tr>
-                <td><input type="text" name="codigo2" required></td>
-                <td><input type="text" name="producto2" required></td>
-                <td><input type="number" name="precio2" step="0.01" required></td>
-                <td><input type="number" name="cantidad2" required></td>
-                <td><input type="number" name="importe2" readonly></td>
-            </tr>
-            <tr>
-                <td><input type="text" name="codigo3" required></td>
-                <td><input type="text" name="producto3" required></td>
-                <td><input type="number" name="precio3" step="0.01" required></td>
-                <td><input type="number" name="cantidad3" required></td>
-                <td><input type="number" name="importe3" readonly></td>
-            </tr>
-            <tr>
-                <td><input type="text" name="codigo4" required></td>
-                <td><input type="text" name="producto4" required></td>
-                <td><input type="number" name="precio4" step="0.01" required></td>
-                <td><input type="number" name="cantidad4" required></td>
-                <td><input type="number" name="importe4" readonly></td>
-            </tr>
-            <tr>
-                <td><input type="text" name="codigo5" required></td>
-                <td><input type="text" name="producto5" required></td>
-                <td><input type="number" name="precio5" step="0.01" required></td>
-                <td><input type="number" name="cantidad5" required></td>
-                <td><input type="number" name="importe5" readonly></td>
-            </tr>
-            <tr class="total">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>Total Bs.</td>
-                <td><input type="number" id="total" readonly></td>
-            </tr>
-        </table>
-        <br>
-        <a class="btn btn-primary" href="/" style="color: white;">Cancelar</a>
-        <a class="btn btn-success" href="#" style="color: white;">Entregar Pedido</a>
-    </form>
- <!--/center-->
+    <div class="container">
+
+        <div class="content">
+            <!-- Sección de búsqueda -->
+            <div class="search-section">
+
+                <form class="search-form" method="POST" action="/buscar_pedido">
+                    <input type="text" name="numero_pedido" class="search-input"
+                           placeholder="Ingrese número de pedido (ej: PED001)"
+                           value="{{ request.form.get('numero_pedido', '') }}" required>
+                    <button type="submit" class="btn btn-primary">Buscar Pedido</button>
+                </form>
+
+                {% if pedidos_ejemplo %}
+                <div style="margin-top: 20px; font-size: 0.9em; color: #6c757d;">
+                    <strong>Pedidos de ejemplo:</strong> PED001, PED002, PED003
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Buscando pedido...</p>
+            </div>
+
+            <!-- Mensajes de error/éxito -->
+            {% if error %}
+            <div class="alert alert-error">
+                ❌ <strong>Error:</strong> {{ error }}
+            </div>
+            {% endif %}
+
+            {% if success %}
+            <div class="alert alert-success">
+                ✅ <strong>Éxito:</strong> {{ success }}
+            </div>
+            {% endif %}
+
+            <!-- Información del pedido y formulario -->
+            {% if pedido %}
+            <div class="pedido-info">
+                <h5><center>Pedido No.:{{ pedido.numero }} </center></h5>
+
+                <table  border=1>
+                    <thead>
+                        <tr>
+                            <th>Cliente:</th>
+                            <th>{{ pedido.cliente }}</th>
+                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                            <th>Teléfono:</th>
+                            <th>{{ pedido.telefono }}</th>
+                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                            <th>Fecha:</th>
+                            <th>{{ pedido.fecha }}</th>
+                        </tr>
+                        <tr>
+                            <th>Dirección:</th>
+                            <th>{{ pedido.direccion }}</th>
+                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                            <th>Ciudad:</th>
+                            <th>{{ pedido.ciudad }}</th>
+                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                            <th>Estado:</th>
+                            <th>{{ pedido.estado }}</th>
+                        </tr>
+                    </thead>
+                </table>
+                        <!--div class="info-label">Total de Artículos</div>
+                        <div class="info-value">{{ pedido.articulos|length }} artículos</div--->
+            </div>
+
+            <div class="form-section">
+
+                <form method="POST" action="/actualizar_pedido" id="pedidoForm">
+                    <input type="hidden" name="numero_pedido" value="{{ pedido.numero }}">
+
+                    <table class="articulos-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Artículo</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for articulo in pedido.articulos %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>
+                                    <input type="text" name="nombre_{{ articulo.id }}"
+                                           class="form-control" value="{{ articulo.nombre }}" required>
+                                </td>
+                                <td>
+                                    <input type="number" name="cantidad_{{ articulo.id }}"
+                                           class="form-control" value="{{ articulo.cantidad }}"
+                                           min="1" required onchange="calcularSubtotal({{ articulo.id }})">
+                                </td>
+                                <td>
+                                    <input type="number" name="precio_{{ articulo.id }}"
+                                           class="form-control" value="{{ '%.2f'|format(articulo.precio) }}"
+                                           step="0.01" min="0" required onchange="calcularSubtotal({{ articulo.id }})">
+                                </td>
+                                <td>
+                                    <span id="subtotal_{{ articulo.id }}" class="subtotal">
+                                        ${{ '%.2f'|format(articulo.cantidad * articulo.precio) }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="total-section">
+                        <strong>Total del Pedido: <span id="total" class="total-value">${{ '%.2f'|format(total) }}</span></strong>
+                    </div>
+
+                    <div class="form-actions">
+                        <br>
+                        <button type="submit" class="btn btn-success">Entregar Pedido</button>
+                        <a href="/" class="btn btn-danger">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Mostrar loading al buscar
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'block';
+        });
+
+        // Calcular subtotales y total
+        function calcularSubtotal(articuloId) {
+            const cantidad = document.querySelector(`input[name="cantidad_${articuloId}"]`).value;
+            const precio = document.querySelector(`input[name="precio_${articuloId}"]`).value;
+            const subtotal = cantidad * precio;
+
+            document.getElementById(`subtotal_${articuloId}`).textContent = `$${subtotal.toFixed(2)}`;
+
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            let total = 0;
+            document.querySelectorAll('.subtotal').forEach(function(elemento) {
+                const valor = parseFloat(elemento.textContent.replace('$', ''));
+                total += valor;
+            });
+
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Validación del formulario
+        document.getElementById('pedidoForm')?.addEventListener('submit', function(e) {
+            const inputs = this.querySelectorAll('input[required]');
+            let valid = true;
+
+            inputs.forEach(function(input) {
+                if (!input.value.trim()) {
+                    valid = false;
+                    input.style.borderColor = '#dc3545';
+                } else {
+                    input.style.borderColor = '#ced4da';
+                }
+            });
+
+            if (!valid) {
+                e.preventDefault();
+                alert('Por favor, complete todos los campos requeridos.');
+            }
+        });
+
+        // Animación suave para los campos
+        document.querySelectorAll('.form-control').forEach(function(input) {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
 </div>
 
 {% endblock %}

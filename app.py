@@ -11,9 +11,67 @@ app.secret_key = 'tu_clave_secreta_muy_segura'  # Cambia esto en producción
 # Simulación de una base de datos de usuarios
 users = {
     'admin': {'password': 'adminpass', 'role': 'admin'},
-    'driver': {'password': 'driverpass', 'role': 'driver'},
+    'driver1': {'password': 'driver1pass', 'role': 'driver'},
+    'driver2': {'password': 'driver2pass', 'role': 'driver'},
+    'driver3': {'password': 'driver3pass', 'role': 'driver'},
     'editor': {'password': 'editorpass', 'role': 'editor'}
 }
+
+
+# Base de datos simulada de pedidos
+PEDIDOS_DB = {
+    "PED001": {
+        "numero": "PED001",
+        "cliente": "Juan Pérez",
+        "fecha": "2024-06-01",
+        "direccion": "Av. Los Sauces # 345",
+        "telefono": "7777 7777",
+        "ciudad": "Cochabamba",
+        "estado": "Pendiente",
+        "articulos": [
+            {"id": 1, "nombre": "Laptop Dell", "cantidad": 2, "precio": 1200.00},
+            {"id": 2, "nombre": "Mouse Inalámbrico", "cantidad": 5, "precio": 25.00},
+            {"id": 3, "nombre": "Teclado Mecánico", "cantidad": 3, "precio": 80.00},
+            {"id": 4, "nombre": "Monitor 24\"", "cantidad": 2, "precio": 300.00},
+            {"id": 5, "nombre": "Webcam HD", "cantidad": 1, "precio": 150.00}
+        ]
+    },
+    "PED002": {
+        "numero": "PED002",
+        "cliente": "María García",
+        "fecha": "2024-06-02",
+        "direccion": "Av. Los Sauces # 345",
+        "telefono": "7777 7777",
+        "ciudad": "Cochabamba",
+        "estado": "Pendiente",
+        "articulos": [
+            {"id": 1, "nombre": "Smartphone Samsung", "cantidad": 1, "precio": 800.00},
+            {"id": 2, "nombre": "Funda Protectora", "cantidad": 2, "precio": 15.00},
+            {"id": 3, "nombre": "Cargador Rápido", "cantidad": 1, "precio": 35.00},
+            {"id": 4, "nombre": "Auriculares Bluetooth", "cantidad": 1, "precio": 120.00},
+            {"id": 5, "nombre": "Protector de Pantalla", "cantidad": 3, "precio": 10.00}
+        ]
+    },
+    "PED003": {
+        "numero": "PED003",
+        "cliente": "Carlos López",
+        "fecha": "2024-06-03",
+        "direccion": "Av. Los Sauces # 345",
+        "telefono": "7777 7777",
+        "ciudad": "Cochabamba",
+        "estado": "Pendiente",
+        "articulos": [
+            {"id": 1, "nombre": "Tablet iPad", "cantidad": 1, "precio": 600.00},
+            {"id": 2, "nombre": "Apple Pencil", "cantidad": 1, "precio": 130.00},
+            {"id": 3, "nombre": "Funda Smart Cover", "cantidad": 1, "precio": 45.00},
+            {"id": 4, "nombre": "Adaptador USB-C", "cantidad": 2, "precio": 25.00},
+            {"id": 5, "nombre": "Cable Lightning", "cantidad": 1, "precio": 20.00}
+        ]
+    }
+}
+
+
+
 
 def login_required(f):
     @wraps(f)
@@ -71,6 +129,7 @@ def ver_mapa():
             'contacto': 'Filomena Delgado',
             'direccion': 'Calle La Tablada #4533',
             'telefono': '77788899',
+            'pedido': '1001',
             'foto': 'tienda_barrio.jpg',
             'ubicacion': [-17.3935, -66.1570]
         },
@@ -79,6 +138,7 @@ def ver_mapa():
             'contacto': 'Carmen Rojas',
             'direccion': 'Av. Blanco Galindo Km 2',
             'telefono': '76543210',
+            'pedido': '1002',
             'foto': 'tienda_carmen.jpg',
             'ubicacion': [-17.3850, -66.1700]
         },
@@ -87,6 +147,7 @@ def ver_mapa():
             'contacto': 'Juan Mamani',
             'direccion': 'Av. América Este #345',
             'telefono': '70707070',
+            'pedido': '1002',
             'foto': 'tienda_andes.jpg',
             'ubicacion': [-17.3980, -66.1420]
         },
@@ -95,6 +156,7 @@ def ver_mapa():
             'contacto': 'Pedro Flores',
             'direccion': 'Calle Jordán #1234',
             'telefono': '71234567',
+            'pedido': '1003',
             'foto': 'tienda_pedro.jpg',
             'ubicacion': [-17.4050, -66.1610]
         },
@@ -103,6 +165,7 @@ def ver_mapa():
             'contacto': 'María Gutiérrez',
             'direccion': 'Av. Ayacucho #887',
             'telefono': '78901234',
+            'pedido': '1004',
             'foto': 'tienda_central.jpg',
             'ubicacion': [-17.3925, -66.1480]
         },
@@ -111,6 +174,7 @@ def ver_mapa():
             'contacto': 'Roberto Mendoza',
             'direccion': 'Av. Heroínas #765',
             'telefono': '76767676',
+            'pedido': '1005',
             'foto': 'tienda_sol.jpg',
             'ubicacion': [-17.3880, -66.1550]
         },
@@ -119,6 +183,7 @@ def ver_mapa():
             'contacto': 'Rosa Méndez',
             'direccion': 'Calle Hamiraya #432',
             'telefono': '79876543',
+            'pedido': '1006',
             'foto': 'tienda_rosa.jpg',
             'ubicacion': [-17.4010, -66.1520]
         }
@@ -134,6 +199,7 @@ def ver_mapa():
             <tr><td>Contacto:</td><td>{ tienda['contacto'] }</td></tr>
             <tr><td>Dirección:</td><td>{ tienda['direccion'] }</td></tr>
             <tr><td>Teléfono:</td><td>{ tienda['telefono'] }</td></tr>
+            <tr><td>Pedido:</td><td>{ tienda['pedido'] }</td></tr>
             <!--tr><td colspan="2"><center><a class="btn btn-primary" href="/pedido" style="color: white;">Ver Pedido</a></center></td></tr-->
             </table>"""
 
@@ -158,3 +224,71 @@ def pedido():
     if 'username' not in session or session['username'] == None:
         return redirect(url_for('login'))
     return render_template("pedido.html")
+
+
+@app.route('/buscar_pedido', methods=['GET', 'POST'])
+def buscar_pedido():
+    pedido = None
+    error = None
+    success = None
+    total = 0
+
+    if request.method == 'POST':
+        numero_pedido = request.form.get('numero_pedido', '').strip().upper()
+
+        if not numero_pedido:
+            error = "Por favor, ingrese un número de pedido."
+        elif numero_pedido in PEDIDOS_DB:
+            pedido = PEDIDOS_DB[numero_pedido]
+            # Calcular total
+            total = sum(art['cantidad'] * art['precio'] for art in pedido['articulos'])
+        else:
+            error = f"El pedido '{numero_pedido}' no existe en el sistema."
+
+    #return render_template_string(HTML_TEMPLATE,
+    return render_template('pedido.html',
+                                pedido=pedido,
+                                error=error,
+                                success=success,
+                                total=total,
+                                pedidos_ejemplo=True)
+
+@app.route('/actualizar_pedido', methods=['POST'])
+def actualizar_pedido():
+    numero_pedido = request.form.get('numero_pedido')
+
+    if numero_pedido not in PEDIDOS_DB:
+        return render_template('pedido.html',
+                                    error="Pedido no encontrado.")
+
+    # Actualizar artículos
+    pedido = PEDIDOS_DB[numero_pedido]
+
+    try:
+        for articulo in pedido['articulos']:
+            articulo_id = articulo['id']
+            articulo['nombre'] = request.form.get(f'nombre_{articulo_id}', '').strip()
+            articulo['cantidad'] = int(request.form.get(f'cantidad_{articulo_id}', 0))
+            articulo['precio'] = float(request.form.get(f'precio_{articulo_id}', 0))
+
+            # Validaciones básicas
+            if not articulo['nombre']:
+                raise ValueError("El nombre del artículo no puede estar vacío.")
+            if articulo['cantidad'] <= 0:
+                raise ValueError("La cantidad debe ser mayor a cero.")
+            if articulo['precio'] < 0:
+                raise ValueError("El precio no puede ser negativo.")
+
+        # Calcular nuevo total
+        total = sum(art['cantidad'] * art['precio'] for art in pedido['articulos'])
+
+        return render_template('pedido.html',
+                                    pedido=pedido,
+                                    success="Pedido actualizado correctamente.",
+                                    total=total)
+
+    except (ValueError, TypeError) as e:
+        return render_template('pedido2.html',
+                                    pedido=pedido,
+                                    error=f"Error al actualizar: {str(e)}",
+                                    total=sum(art['cantidad'] * art['precio'] for art in pedido['articulos']))
