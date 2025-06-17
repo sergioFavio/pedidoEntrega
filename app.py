@@ -10,12 +10,65 @@ app.secret_key = 'tu_clave_secreta_muy_segura'  # Cambia esto en producción
 
 # Simulación de una base de datos de usuarios
 users = {
-    'admin': {'password': 'adminpass', 'role': 'admin'},
+    'manager1': {'password': 'manager1pass', 'role': 'admin'},
+    'manager2': {'password': 'manager2pass', 'role': 'admin'},
     'driver1': {'password': 'driver1pass', 'role': 'driver'},
     'driver2': {'password': 'driver2pass', 'role': 'driver'},
     'driver3': {'password': 'driver3pass', 'role': 'driver'},
-    'editor': {'password': 'editorpass', 'role': 'editor'}
+    'seller1': {'password': 'seller1pass', 'role': 'seller'},
+    'seller2': {'password': 'seller2pass', 'role': 'seller'},
+    'seller3': {'password': 'seller3pass', 'role': 'seller'}
 }
+
+# Base de datos simulada de clientes
+CLIENTES_DB = {
+    "CLI001": {
+        "codigo": "CLI001",
+        "cliente": "Juan Pérez",
+        "fecha": "2024-06-01",
+        "direccion": "Av. Los Sauces # 345",
+        "telefono": "7777 7777",
+        "ciudad": "Cochabamba",
+        "articulos": [
+            {"id": 1, "nombre": "Laptop Dell", "cantidad": 2, "precio": 1200.00},
+            {"id": 2, "nombre": "Mouse Inalámbrico", "cantidad": 5, "precio": 25.00},
+            {"id": 3, "nombre": "Teclado Mecánico", "cantidad": 3, "precio": 80.00},
+            {"id": 4, "nombre": "Monitor 24\"", "cantidad": 2, "precio": 300.00},
+            {"id": 5, "nombre": "Webcam HD", "cantidad": 1, "precio": 150.00}
+        ]
+    },
+    "CLI002": {
+        "codigo": "CLID002",
+        "cliente": "María García",
+        "fecha": "2024-06-02",
+        "direccion": "Av. Los Sauces # 345",
+        "telefono": "7777 7777",
+        "ciudad": "Cochabamba",
+        "articulos": [
+            {"id": 1, "nombre": "Smartphone Samsung", "cantidad": 1, "precio": 800.00},
+            {"id": 2, "nombre": "Funda Protectora", "cantidad": 2, "precio": 15.00},
+            {"id": 3, "nombre": "Cargador Rápido", "cantidad": 1, "precio": 35.00},
+            {"id": 4, "nombre": "Auriculares Bluetooth", "cantidad": 1, "precio": 120.00},
+            {"id": 5, "nombre": "Protector de Pantalla", "cantidad": 3, "precio": 10.00}
+        ]
+    },
+    "CLI003": {
+        "codigo": "CLI003",
+        "cliente": "Carlos López",
+        "fecha": "2024-06-03",
+        "direccion": "Av. Los Sauces # 345",
+        "telefono": "7777 7777",
+        "ciudad": "Cochabamba",
+        "articulos": [
+            {"id": 1, "nombre": "Tablet iPad", "cantidad": 1, "precio": 600.00},
+            {"id": 2, "nombre": "Apple Pencil", "cantidad": 1, "precio": 130.00},
+            {"id": 3, "nombre": "Funda Smart Cover", "cantidad": 1, "precio": 45.00},
+            {"id": 4, "nombre": "Adaptador USB-C", "cantidad": 2, "precio": 25.00},
+            {"id": 5, "nombre": "Cable Lightning", "cantidad": 1, "precio": 20.00}
+        ]
+    }
+}
+
 
 
 # Base de datos simulada de pedidos
@@ -245,7 +298,6 @@ def buscar_pedido():
         else:
             error = f"El pedido '{numero_pedido}' no existe en el sistema."
 
-    #return render_template_string(HTML_TEMPLATE,
     return render_template('pedido.html',
                                 pedido=pedido,
                                 error=error,
@@ -292,3 +344,42 @@ def actualizar_pedido():
                                     pedido=pedido,
                                     error=f"Error al actualizar: {str(e)}",
                                     total=sum(art['cantidad'] * art['precio'] for art in pedido['articulos']))
+
+
+@app.route('/preventa')
+def preventa():
+    if 'username' not in session or session['username'] == None:
+        return redirect(url_for('login'))
+    return render_template("preventa.html")
+
+@app.route('/buscar_cliente', methods=['GET', 'POST'])
+def buscar_cliente():
+    codigo = None
+    error = None
+    success = None
+    total = 0
+
+    if request.method == 'POST':
+        codigo_cliente = request.form.get('codigo_cliente', '').strip().upper()
+
+        if not codigo_cliente:
+            error = "Por favor, ingrese un código de cliente."
+        elif codigo_cliente in CLIENTES_DB:
+            codigo = CLIENTES_DB[codigo_cliente]
+            # Calcular total
+            ####total = sum(art['cantidad'] * art['precio'] for art in pedido['articulos'])
+        else:
+            error = f"El cliente '{codigo_cliente}' no existe en el sistema."
+
+    return render_template('preventa.html',
+                                codigo=codigo,
+                                error=error,
+                                success=success,
+                                total=total,
+                                clientes_ejemplo=True)
+
+
+@app.route('/grabar_pedido', methods=['POST'])
+def grabar_pedido():
+    ##numero_pedido = request.form.get('numero_pedido')
+    return "Grabando Pedido ..."
