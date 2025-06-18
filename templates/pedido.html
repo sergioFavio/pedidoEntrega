@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="container-fluid" style="position: absolute;">
+<div>
     <div class="container">
 
         <div class="content">
@@ -48,30 +48,27 @@
             <div class="pedido-info">
                 <h5><center>Pedido No.:{{ pedido.numero }} </center></h5>
 
-                <table  border=1>
-                    <thead>
-                        <tr>
-                            <th>Cliente:</th>
-                            <th>{{ pedido.cliente }}</th>
-                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                            <th>Teléfono:</th>
-                            <th>{{ pedido.telefono }}</th>
-                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                            <th>Fecha:</th>
-                            <th>{{ pedido.fecha }}</th>
-                        </tr>
-                        <tr>
-                            <th>Dirección:</th>
-                            <th>{{ pedido.direccion }}</th>
-                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                            <th>Ciudad:</th>
-                            <th>{{ pedido.ciudad }}</th>
-                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                            <th>Estado:</th>
-                            <th>{{ pedido.estado }}</th>
-                        </tr>
-                    </thead>
-                </table>
+                <div>
+                    <p>
+                        <span>Cliente: {{ pedido.cliente }}</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>Teléfono: {{ pedido.telefono }}</th>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>Fecha: {{ pedido.fecha }}</span>
+                    </p>
+                    <p>
+                        <span>Dirección: {{ pedido.direccion }}</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>Ciudad: {{ pedido.ciudad }}</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>Estado: {{ pedido.estado }}</span>
+                    </p>
+                </div>
                         <!--div class="info-label">Total de Artículos</div>
                         <div class="info-value">{{ pedido.articulos|length }} artículos</div--->
             </div>

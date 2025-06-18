@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mi App Flask{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <link rel = "stylesheet" href = "{{ url_for('static', filename='css/pedido.css') }}" />
+
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -21,17 +24,41 @@
                     {% if 'username' in session %}
                         {% if session['role'] == 'admin' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Gestión de Usuarios</a>
+                                <a class="nav-link" href="#">Gestión de Pedidos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Configuración del Sistema</a>
-                            </li>
-                        {% elif session['role'] == 'editor' %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Crear Contenido</a>
+                                <a class="nav-link" href="#">Gestión de Clientes</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Editar Contenido</a>
+                                <a class="nav-link" href="#">Gestión de Repartidores</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="reporteAdminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Reportes
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="productoDropdown">
+                                    <li><a class="dropdown-item" href="#">Reporte 1</a></li>
+                                    <li><a class="dropdown-item" href="#">Reporte 2</a></li>
+                                    <li><a class="dropdown-item" href="#">Reporte 3</a></li>
+                                </ul>
+                            </li>
+
+                        {% elif session['role'] == 'seller' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/ver_mapa">Recorrido</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/preventa">Pre-venta</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="reporteSellerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Reportes
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="productoDropdown">
+                                    <li><a class="dropdown-item" href="#">Reporte 1</a></li>
+                                    <li><a class="dropdown-item" href="#">Reporte 2</a></li>
+                                    <li><a class="dropdown-item" href="#">Reporte 3</a></li>
+                                </ul>
                             </li>
                         {% elif session['role'] == 'driver' %}
                             <li class="nav-item">
@@ -41,7 +68,7 @@
                                 <a class="nav-link" href="/pedido">Entrega Pedidos</a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="reporteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="reporteDriverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Reportes
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="productoDropdown">

@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="container-fluid" style="position: absolute;">
+<div>
     <div class="container">
 
         <div class="content">
@@ -48,30 +48,28 @@
             <div class="pedido-info">
                 <h5><center>Pedido No.:{{ codigo.codigo }} </center></h5>
 
-                <table  border=1>
-                    <thead>
-                        <tr>
-                            <th>Cliente:</th>
-                            <th>{{ codigo.cliente }}</th>
-                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                            <th>Teléfono:</th>
-                            <th>{{ codigo.telefono }}</th>
-                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                            <th>Fecha:</th>
-                            <th>{{ codigo.fecha }}</th>
-                        </tr>
-                        <tr>
-                            <th>Dirección:</th>
-                            <th>{{ codigo.direccion }}</th>
-                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                            <th>Ciudad:</th>
-                            <th>{{ codigo.ciudad }}</th>
-                            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                            <th>Estado:</th>
-                            <th>{{ codigo.estado }}</th>
-                        </tr>
-                    </thead>
-                </table>
+                <div>
+                    <p>
+                        <span>Cliente: {{ codigo.cliente }}</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>Teléfono: {{ codigo.telefono }}</th>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>Fecha: {{ codigo.fecha }}</span>
+                    </p>
+                    <p>
+                        <span>Dirección: {{ codigo.direccion }}</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>Ciudad: {{ codigo.ciudad }}</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>Estado: {{ codigo.estado }}</span>
+                    </p>
+                </div>
+
                         <!--div class="info-label">Total de Artículos</div>
                         <div class="info-value">{{ codigo.articulos|length }} artículos</div--->
             </div>

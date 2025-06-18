@@ -1,24 +1,44 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, Response, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
 from functools import wraps
 
 import json
 import folium
 
-
 app = Flask(__name__)
 app.secret_key = 'tu_clave_secreta_muy_segura'  # Cambia esto en producción
 
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    '{SGBD}://{usuario}:{clave}@{servidor}/{database}'.format(
+        SGBD = 'mysql+mysqlconnector',
+        usuario = 'iamateria',
+        clave = 'mysqlroot',
+        servidor = 'iamateria.mysql.pythonanywhere-services.com',
+        database = 'iamateria$pedidoEntrega'
+    )
+
+db = SQLAlchemy(app)
+
+class Usuarios(db.Model):
+    nombre = db.Column(db.String(40),nullable=False )
+    usuario = db.Column(db.String(20), primary_key=True)
+    clave = db.Column(db.String(20), nullable=False)
+    role = db.Column(db.String(20), nullable=False)
+    correo = db.Column(db.String(80), nullable=False)
+
+
 # Simulación de una base de datos de usuarios
-users = {
-    'manager1': {'password': 'manager1pass', 'role': 'admin'},
-    'manager2': {'password': 'manager2pass', 'role': 'admin'},
-    'driver1': {'password': 'driver1pass', 'role': 'driver'},
-    'driver2': {'password': 'driver2pass', 'role': 'driver'},
-    'driver3': {'password': 'driver3pass', 'role': 'driver'},
-    'seller1': {'password': 'seller1pass', 'role': 'seller'},
-    'seller2': {'password': 'seller2pass', 'role': 'seller'},
-    'seller3': {'password': 'seller3pass', 'role': 'seller'}
-}
+##users = {
+##    'manager1': {'password': 'manager1pass', 'role': 'admin'},
+##    'manager2': {'password': 'manager2pass', 'role': 'admin'},
+##    'driver1': {'password': 'driver1pass', 'role': 'driver'},
+##    'driver2': {'password': 'driver2pass', 'role': 'driver'},
+##    'driver3': {'password': 'driver3pass', 'role': 'driver'},
+##    'seller1': {'password': 'seller1pass', 'role': 'seller'},
+##    'seller2': {'password': 'seller2pass', 'role': 'seller'},
+##    'seller3': {'password': 'seller3pass', 'role': 'seller'}
+##}
 
 # Base de datos simulada de clientes
 CLIENTES_DB = {
@@ -139,19 +159,59 @@ def login_required(f):
 def home():
     return render_template('home.html')
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if username in users and users[username]['password'] == password:
+
+        #registro_usuario = Usuarios.query.filter_by(usuario=request.form['username']).first()
+
+        # Buscar usuario con clave primaria = "johndoe"
+        #usuario = Usuarios.query.get("seller3")
+        registro_usuario = Usuarios.query.get(username)
+
+        usuario = registro_usuario.usuario
+
+        if registro_usuario and registro_usuario.clave == password:
             session['username'] = username
-            session['role'] = users[username]['role']
+            session['role'] = registro_usuario.role
             flash(f'Bienvenido, {username}!', 'success')
             return redirect(url_for('dashboard'))
         else:
             flash('Usuario o contraseña incorrectos', 'error')
     return render_template('login.html')
+
+
+
+'''
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        usuario = Usuarios.query.filter_by(usuario=request.form['username']).first()
+        if usuario:
+            if request.form['password'] == usuario.clave:
+                session['username'] = username
+                session['rol'] = usuario.rol
+                flash(f'Bienvenido, {username}!', 'success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('Contraseña incorrecta', 'error')
+                return render_template('login.html')
+        else:
+            flash('Usuario incorrecto', 'error')
+            return render_template('login.html')  #  usuario inexistente
+'''
+
+
+
+
+
+
 
 @app.route('/logout')
 def logout():
@@ -382,4 +442,5 @@ def buscar_cliente():
 @app.route('/grabar_pedido', methods=['POST'])
 def grabar_pedido():
     ##numero_pedido = request.form.get('numero_pedido')
-    return "Grabando Pedido ..."
+    pass
+    #return "Grabando Pedido ..."
